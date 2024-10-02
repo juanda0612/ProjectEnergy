@@ -68,4 +68,38 @@ public class Users_db {
 
         return resultado;
     }
+
+    public boolean updateUser(User u){
+
+        User us = searchUserbyEmail(u.getEmail());
+        boolean resultado = false;
+        String sql = "update users set usertype=?, username=?, password=?, forename=?, surname=?, email=?, city=?, country=? where id=?";
+
+        try{
+
+            if(us != null){
+                conexion = con.conecta();
+
+                ps = conexion.prepareStatement(sql);
+                ps.setString(1,u.getUserType());
+                ps.setString(2,u.getUserName());
+                ps.setString(3,u.getPassword());
+                ps.setString(4,u.getForename());
+                ps.setString(5,u.getSurname());
+                ps.setString(6,u.getEmail());
+                ps.setString(7,u.getCity());
+                ps.setString(8,u.getCountry());
+                ps.setInt(9,u.getId());
+                resultado = ps.executeUpdate()>0;
+                conexion.close();
+                System.out.println("Datos actualizados correctamente.");
+            }else{
+                System.out.println("El usuario no se encuentra registrado.");
+            }
+
+        }catch(SQLException e){
+            System.out.println("Error en el registro: "+e);
+        }
+        return resultado;
+    }
 }
